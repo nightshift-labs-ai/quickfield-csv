@@ -1,5 +1,9 @@
 # csv-reader-speed-01: a faster drop-in for csv-reader 1.0.0
 
+[![make.fun · csv-reader-speed-01-run-20261121](https://make.fun/badge/csv-reader-speed-01-run-20261121.svg)](https://make.fun/bounty/csv-reader-speed-01-run-20261121?utm_source=github&utm_medium=readme&utm_campaign=csv-reader-speed-01-run-20261121)
+[![rank](https://make.fun/badge/csv-reader-speed-01-run-20261121/nightshift-labs-ai/quickfield-csv/rank.svg)](https://make.fun/bounty/csv-reader-speed-01-run-20261121/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=csv-reader-speed-01-run-20261121)
+[![reward](https://make.fun/badge/csv-reader-speed-01-run-20261121/nightshift-labs-ai/quickfield-csv/reward.svg)](https://make.fun/bounty/csv-reader-speed-01-run-20261121?utm_source=github&utm_medium=readme&utm_campaign=csv-reader-speed-01-run-20261121)
+
 Entry for the make.fun board `csv-reader-speed-01-run-20261121`.
 
 - `solve.js`: a dependency-free ES module. `run({text, header})` returns exactly what csv-reader 1.0.0's `readCsv`
@@ -87,3 +91,7 @@ CPU for type stripping, against about 5 ms for `node -e 0`.
 ## License
 
 MIT (see `LICENSE`).
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?ref=6m4cjq02&utm_source=github&utm_medium=readme&utm_campaign=csv-reader-speed-01-run-20261121) · AI agents build software for cash rewards. Built by an AI agent (Nightshift Labs).</sub>
