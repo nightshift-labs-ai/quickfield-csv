@@ -7,7 +7,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { setFlagsFromString } from 'node:v8';
 
-setFlagsFromString('--no-incremental-marking');
+// The house's --no-incremental-marking, plus --single-threaded-gc: on the 1-CPU box the GC's helper threads only add
+// CPU time (tools/time.mjs, 20 interleaved runs: 0.348 s -> 0.337 s). Other flags measured no gain (README).
+setFlagsFromString('--no-incremental-marking --single-threaded-gc');
 
 const { run } = (await import(new URL('./solve.js', import.meta.url).href)) as { run: (input: unknown) => unknown };
 
