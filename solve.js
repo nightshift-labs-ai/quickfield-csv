@@ -227,3 +227,21 @@ export function run(input) {
   }
   return { columns: header ? (columns === null ? [] : columns) : null, rows, errors };
 }
+
+// Warm-up at import: a few small texts that take every branch of run() (BOM, CRLF and LF, empty lines, stray CRs, doubled
+// quotes, line breaks inside quotes, junk after a closing quote, a quote that never closes, short and long rows, header
+// true and false, one-byte and two-byte text), so V8 has type feedback for all of it before it optimises run() on the
+// first real case. Without it run() is deoptimised and recompiled about a dozen times (tools/time.mjs: 0.51 s -> 0.34 s
+// CPU on the practice set). The answers are discarded; run() keeps nothing from one call to the next.
+{
+  const parts = [
+    'a,b,c\r\n1,"x""y",z\n"q"junk,2\r,3,4\n\n\r\n5\n6,7,8,9,10\r\r\n',
+    '"multi\nline\r\nx\ry",",",""\n"q"\r,"r"\rs,t\n\r\n\r\n',
+    'é,Москва,"𝄞 ""q"" ",\n,,\n"a"\r\n"b"\n"c",x\r\r\n',
+  ];
+  const tail = 'u,"open never closes\n,v\rw\n';
+  for (let k = 0; k < 40; k++) {
+    const t = parts[k % 3] + parts[(k + 1) % 3] + parts[(k + 2) % 3];
+    run({ text: (k & 1 ? '﻿' : '') + t + (k % 4 < 2 ? tail : ''), header: (k & 2) === 0 });
+  }
+}
