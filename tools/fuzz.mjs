@@ -119,6 +119,31 @@ function minimise(input) {
   return { text: t, header: input.header };
 }
 
+// EXHAUSTIVE=<L>: first try every string of length 0..L over the special characters, with header true and false.
+const EXH = Number(process.env.EXHAUSTIVE ?? 0);
+if (EXH > 0) {
+  const ALPHA = ['"', ',', '\n', '\r', 'a', '﻿'];
+  let tried = 0;
+  for (let len = 0; len <= EXH; len++) {
+    const idx = new Array(len).fill(0);
+    for (;;) {
+      let t = '';
+      for (let k = 0; k < len; k++) t += ALPHA[idx[k]];
+      for (const header of [false, true]) {
+        tried++;
+        if (!same({ text: t, header })) {
+          console.log('DIFFERENCE (exhaustive):', JSON.stringify({ text: t, header }));
+          process.exit(1);
+        }
+      }
+      let k = len - 1;
+      while (k >= 0 && ++idx[k] === ALPHA.length) idx[k--] = 0;
+      if (k < 0) break;
+    }
+  }
+  console.log(`exhaustive: ${tried} inputs (every string up to length ${EXH} over ${ALPHA.length} characters, both headers): 0 differences`);
+}
+
 let n = 0;
 let chars = 0;
 for (let i = 0; i < COUNT; i++) {
