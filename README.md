@@ -68,6 +68,12 @@ What each step measured (each a separate interleaved session against the version
 | `--no-maglev` (12 runs) | 0.330 | 0.328 | no (noise) |
 | `--single-threaded-gc` (12 runs, then 20 runs) | 0.330, 0.348 | 0.323, 0.337 | yes |
 | hand-written serializer instead of `JSON.stringify` (in-process, 3 reps) | 64-66 ms | 178-212 ms | no |
+| hot loops test `c > 44` (unquoted) / `c > 34` (quoted) first (14 runs) | 0.307 | 0.312 | no (noise) |
+| run everything in a Worker created after `--min/max-semi-space-size=64` (0 scavenges instead of 9) (14 runs) | 0.292 | 0.299 | no (worker start-up eats the GC saving) |
+
+Semi-space flags set with `setFlagsFromString` don't reach the main isolate's heap (still 9 scavenges, about 45 ms of
+pauses in total). Only a command-line flag or a new isolate gets them, and the driver is started as plain
+`node main.ts`.
 
 Phase profile of one run of ours (`tools/profile.mjs`, CPU of all threads): readFileSync + UTF-8 decode about 31 ms,
 JSON.parse about 19 ms, run() for 6 cases 128-178 ms (warm, run() alone is about 45 ms; the rest is the one TurboFan
