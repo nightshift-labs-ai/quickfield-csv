@@ -236,12 +236,13 @@ export function run(input) {
 {
   const parts = [
     'a,b,c\r\n1,"x""y",z\n"q"junk,2\r,3,4\n\n\r\n5\n6,7,8,9,10\r\r\n',
-    '"multi\nline\r\nx\ry",",",""\n"q"\r,"r"\rs,t\n\r\n\r\n',
+    '"multi\nline\r\nx\ry",",",""\n"q"\r,"r"\rs,t\n\r\n\r\n"j"k\n1,"j"\rk\r\n',
     'é,Москва,"𝄞 ""q"" ",\n,,\n"a"\r\n"b"\n"c",x\r\r\n',
   ];
-  const tail = 'u,"open never closes\n,v\rw\n';
-  for (let k = 0; k < 40; k++) {
+  // texts end every way a field can meet the end: unquoted, quoted, after junk, after a comma, after a stray CR
+  const ends = ['', 'z', '"z"', '"z"j', 'z,', 'z\r', 'u,"open never closes\n,v\rw\n', 'u,"open never closes\n,v\rw'];
+  for (let k = 0; k < 48; k++) {
     const t = parts[k % 3] + parts[(k + 1) % 3] + parts[(k + 2) % 3];
-    run({ text: (k & 1 ? '﻿' : '') + t + (k % 4 < 2 ? tail : ''), header: (k & 2) === 0 });
+    run({ text: (k & 1 ? '﻿' : '') + t + ends[k % 8], header: (k & 2) === 0 });
   }
 }
