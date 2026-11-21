@@ -22,6 +22,7 @@ None of them hold kit paths. Give the kit directory as the first argument (or as
 node tools/check.mjs <kit-dir>                     # practice cases: ours vs the reference vs expected.json
 node tools/fuzz.mjs <kit-dir> [count] [seed]       # differential fuzzer, seeded; prints the first difference, minimised
 EXHAUSTIVE=7 node tools/fuzz.mjs <kit-dir> 20000   # also every string up to length 7 over  " , LF CR a BOM  (both headers)
+node tools/gencheck.mjs <kit-dir> [count] [seed]  # fresh cases from the kit's own generator, ours vs the reference
 node tools/time.mjs <kit-dir> [runs] [name=main.ts ...]   # fresh `node main.ts` per run, child CPU via /usr/bin/time
 node --no-incremental-marking --single-threaded-gc tools/profile.mjs <kit-dir>   # CPU per phase of one run
 ```
@@ -35,6 +36,9 @@ caught within the first 5 inputs and minimised to 3-6 characters.
 - `tools/check.mjs`: all 6 practice cases identical to the reference and to `expected.json`.
 - `tools/fuzz.mjs`: seeds 1-7, 20,000 inputs each (seed 5: 100,000), plus the exhaustive sweep of all 671,846 strings up
   to length 7 over the special characters: 0 differences.
+- `tools/gencheck.mjs`: 90 fresh cases (seed `gencheck-1`: 30, seed `gencheck-2`: 60) drawn with the kit's own case
+  generator, all identical to the reference. Between them they met 20,982 long_row, 11,107 short_row, 4,538 stray_cr,
+  4,443 quote_junk and 42 unterminated_quote errors.
 - Two runs of `node main.ts` write identical `answers.json` bytes.
 
 ## Measured CPU time (practice set, 6 cases, about 10.2 M characters)
